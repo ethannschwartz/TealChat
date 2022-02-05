@@ -2,6 +2,18 @@
   text-align: center;
 }
 
+#you {
+  background-color: #0cbea9;
+  color:white;
+  margin-left:auto;
+  border-radius: 0.5em 0 0.5em 0.5em;
+}
+
+#other {
+  background-color: white;
+  border-radius: 0 0.5em 0.5em 0.5em;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
