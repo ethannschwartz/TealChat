@@ -29,7 +29,7 @@ const Chat = (props) =>  {
             props.setMessagesArray(array => [...array, data]);
             document.querySelector('#ui-chat').scrollTop = document.querySelector('#ui-chat').scrollHeight;
         });
-    }, [props.socket, props])
+    }, [props.socket, props]);
 
     return (
         <section className={'flex flex-col justify-start bg-slate-600 w-full h-full relative'}>
