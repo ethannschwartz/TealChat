@@ -30,7 +30,7 @@ const Chat = (props) =>  {
             setMessagesArray(array => [...array, data]);
             document.querySelector('#ui-chat').scrollTop = document.querySelector('#ui-chat').scrollHeight;
         });
-    }, [props.socket, props.room])
+    }, [props.socket, props.room]);
 
     return (
         <section className={'flex flex-col justify-start bg-slate-600 w-full h-full relative'}>
@@ -63,6 +63,7 @@ const Chat = (props) =>  {
             </ul>
             <form onSubmit={sendMessage}
                   className={'flex border absolute bottom-0 w-full'}>
+
                 <input type="text"
                        className={'p-2 text-lg w-full outline-none'}
                        value={currentMessage}
