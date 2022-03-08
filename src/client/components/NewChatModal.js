@@ -2,12 +2,13 @@ import {MdClose} from "react-icons/md";
 
 const NewChatModal = (props) => {
     return (
-        <div className={'w-screen h-screen backdrop-blur-sm bg-gray-700/75 fixed top-0 left-0 flex flex-col' +
-            ' justify-center z-30'}>
-            <form onClick={props.joinRoom}
+        <div className={'w-screen h-screen backdrop-blur-sm bg-gray-700/75 fixed top-0 left-0 flex flex-col justify-center z-30'}>
+            <form onSubmit={props.joinRoom}
                   className={'w-96 p-4 h-fit m-auto shadow-2xl bg-white rounded-md'}>
 
-                <button onClick={() => props.setNewChatModalSeen(false)} className={'text-slate-400 hover:text-black text-2xl float-right'}>
+                <button type={'button'}
+                        onClick={() => props.setNewChatModalSeen(false)}
+                        className={'text-slate-400 hover:text-black text-2xl float-right'}>
                     <MdClose />
                 </button>
 

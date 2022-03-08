@@ -6,6 +6,7 @@ import {DateTime} from "luxon/build/es6/luxon";
 const Chat = (props) =>  {
     const [currentMessage, setCurrentMessage] = useState('');
     const [messagesArray, setMessagesArray] = useState([]);
+    const [chatOpen, setChatOpen] = useState(false);
 
     const sendMessage = async (e) => {
         e.preventDefault();
@@ -24,11 +25,12 @@ const Chat = (props) =>  {
     }
 
     useEffect(() => {
+        props.room !== '' ? setChatOpen(false) :setChatOpen(true);
         props.socket.on('receive_message', (data) => {
             setMessagesArray(array => [...array, data]);
             document.querySelector('#ui-chat').scrollTop = document.querySelector('#ui-chat').scrollHeight;
         });
-    }, [props.socket])
+    }, [props.socket, props.room]);
 
     return (
         <section className={'flex flex-col justify-start bg-slate-600 w-full h-full relative'}>
@@ -59,13 +61,16 @@ const Chat = (props) =>  {
                 }
                 <div className={'p-6 w-full'}>{}</div>
             </ul>
-            <form onSubmit={sendMessage} className={'flex border absolute bottom-0 w-full'}>
+            <form onSubmit={sendMessage}
+                  className={'flex border absolute bottom-0 w-full'}>
+
                 <input type="text"
                        className={'p-2 text-lg w-full outline-none'}
                        value={currentMessage}
                        onChange={(e) => setCurrentMessage(e.target.value)}
                        placeholder={'Message'}/>
                 <button className={'bg-pink-600 px-4 text-white flex justify-evenly w-32 items-center hover:bg-pink-700'}
+                        disabled={chatOpen}
                         type={'submit'}>SEND <MdSend className={'-rotate-45 duration-200'}/></button>
             </form>
         </section>
