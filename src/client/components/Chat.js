@@ -5,7 +5,6 @@ import {DateTime} from "luxon/build/es6/luxon";
 
 const Chat = (props) =>  {
     const [currentMessage, setCurrentMessage] = useState('');
-    const [messagesArray, setMessagesArray] = useState([]);
     const [chatOpen, setChatOpen] = useState(false);
 
     const sendMessage = async (e) => {
@@ -18,7 +17,7 @@ const Chat = (props) =>  {
                 time: new DateTime(Date.now()).toFormat('ff'),
             }
             await props.socket.emit('send_message', messageData);
-            setMessagesArray((array) => [...array, messageData])
+            props.setMessagesArray((array) => [...array, messageData])
             setCurrentMessage('');
             document.querySelector('#ui-chat').scrollTop = document.querySelector('#ui-chat').scrollHeight;
         }
@@ -27,10 +26,10 @@ const Chat = (props) =>  {
     useEffect(() => {
         props.room !== '' ? setChatOpen(false) :setChatOpen(true);
         props.socket.on('receive_message', (data) => {
-            setMessagesArray(array => [...array, data]);
+            props.setMessagesArray(array => [...array, data]);
             document.querySelector('#ui-chat').scrollTop = document.querySelector('#ui-chat').scrollHeight;
         });
-    }, [props.socket, props.room]);
+    }, [props.socket, props]);
 
     return (
         <section className={'flex flex-col justify-start bg-slate-600 w-full h-full relative'}>
@@ -43,7 +42,7 @@ const Chat = (props) =>  {
             <ul className={'h-full bg-slate-600 overflow-scroll'}
                 id={'ui-chat'}>
                 {
-                    messagesArray.map((message, i) => {
+                    props.messagesArray.map((message, i) => {
                         return (
                             <li key={i}
                                 id={props.username === message.author ? 'you' : 'other'}
@@ -63,7 +62,6 @@ const Chat = (props) =>  {
             </ul>
             <form onSubmit={sendMessage}
                   className={'flex border absolute bottom-0 w-full'}>
-
                 <input type="text"
                        className={'p-2 text-lg w-full outline-none'}
                        value={currentMessage}

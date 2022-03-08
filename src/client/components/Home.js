@@ -10,9 +10,12 @@ const Home = () => {
     const [newChatModalSeen, setNewChatModalSeen] = useState(false);
     const username = sessionStorage.getItem('username');
     const [room, setRoom] = useState('');
+    const [messagesArray, setMessagesArray] = useState([]);
+
 
     const joinRoom = (e) => {
         e.preventDefault();
+        setMessagesArray([]);
         if((username !== '') && (room !== '')) {
             socket.emit('join_room', room);
             console.log(`User with ID: ${socket.id} joined room: ${room}`)
@@ -39,6 +42,8 @@ const Home = () => {
                 <Chat socket={socket}
                       username={username}
                       room={room}
+                      messagesArray={messagesArray}
+                      setMessagesArray={setMessagesArray}
                       newChatModalSeen={newChatModalSeen}
                       setNewChatModalSeen={setNewChatModalSeen}
                 />
