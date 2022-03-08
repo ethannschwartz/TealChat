@@ -1,27 +1,32 @@
 import {useEffect, useState} from "react";
 import {MdSend} from "react-icons/md";
 import {BsPlusSquare} from "react-icons/bs";
+import {DateTime} from "luxon/build/es6/luxon";
 
 const Chat = (props) =>  {
     const [currentMessage, setCurrentMessage] = useState('');
     const [messagesArray, setMessagesArray] = useState([]);
 
-    const sendMessage = async () => {
+    const sendMessage = async (e) => {
+        e.preventDefault();
         if(currentMessage !== "") {
             const messageData = {
                 room: props.room,
                 author: props.username,
                 message: currentMessage,
-                time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes(),
+                time: new DateTime(Date.now()).toFormat('ff'),
             }
             await props.socket.emit('send_message', messageData);
             setMessagesArray((array) => [...array, messageData])
+            setCurrentMessage('');
+            document.querySelector('#ui-chat').scrollTop = document.querySelector('#ui-chat').scrollHeight;
         }
     }
 
     useEffect(() => {
         props.socket.on('receive_message', (data) => {
             setMessagesArray(array => [...array, data]);
+            document.querySelector('#ui-chat').scrollTop = document.querySelector('#ui-chat').scrollHeight;
         });
     }, [props.socket])
 
@@ -33,32 +38,36 @@ const Chat = (props) =>  {
                     <BsPlusSquare className={'text-slate-600 mx-4 hover:text-black'}/>
                 </button>
             </header>
-            <section className={'h-full bg-slate-600 overflow-scroll'}>
+            <ul className={'h-full bg-slate-600 overflow-scroll'}
+                id={'ui-chat'}>
                 {
-                    messagesArray.map((message, i, j, k, l) => {
+                    messagesArray.map((message, i) => {
                         return (
-                            <div key={i}
-                                 id={props.username === message.author ? 'you' : 'other'}
-                                 className={`bg-white w-fit py-2 px-4 text-left my-4 mx-8`}>
-                                <h1 key={j} className={'text-slate-600 text-sm'}>
+                            <li key={i}
+                                id={props.username === message.author ? 'you' : 'other'}
+                                className={`bg-white w-fit py-2 px-4 text-left my-4 mx-8 duration-300 hover:scale-[130%] hover:my-6 hover:mx-16`}>
+                                <h1 key={i+'a'}
+                                    className={'text-slate-600 text-sm'}>
                                     {props.username === message.author? "You" :message.author}
                                 </h1>
-                                <p key={k}>{message.message}</p>
-                                <p key={l} className={'text-xs text-right'}>{message.time}</p>
-                            </div>
+                                <p key={i+'b'}>{message.message}</p>
+                                <p key={i+'c'}
+                                   className={'text-xs text-right'}>{message.time}</p>
+                            </li>
                         )
                     })
                 }
-            </section>
-            <footer className={'flex border absolute bottom-0 w-full'}>
+                <div className={'p-6 w-full'}>{}</div>
+            </ul>
+            <form onSubmit={sendMessage} className={'flex border absolute bottom-0 w-full'}>
                 <input type="text"
                        className={'p-2 text-lg w-full outline-none'}
+                       value={currentMessage}
                        onChange={(e) => setCurrentMessage(e.target.value)}
                        placeholder={'Message'}/>
-                <button className={'bg-pink-600 px-4 text-white flex justify-evenly w-32 items-center' +
-                    ' hover:bg-pink-700'}
-                        onClick={sendMessage}>SEND <MdSend className={'-rotate-45 duration-200'}/></button>
-            </footer>
+                <button className={'bg-pink-600 px-4 text-white flex justify-evenly w-32 items-center hover:bg-pink-700'}
+                        type={'submit'}>SEND <MdSend className={'-rotate-45 duration-200'}/></button>
+            </form>
         </section>
     );
 }
