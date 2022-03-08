@@ -3,12 +3,17 @@ const app = express();
 const cors = require('cors');
 const http = require('http');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
+
 const { Server } = require('socket.io');
-const knex = require('../server/knex');
+const login = require('./routes/login');
+const register = require('./routes/register');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 const server = http.createServer(app);
 
@@ -36,26 +41,8 @@ io.on('connection', (socket) => {
     });
 });
 
-app.post('/user', (req, res) => {
-    knex.db('users')
-        .insert({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            username: req.body.username,
-            password: req.body.password,
-        })
-        .then(() => res.send({success: true, message: 'User created'}))
-        .catch(err => console.log(err));
-});
+app.use('/register', register)
 
-app.post(`/login`, (req, res) => {
-    knex.db('users')
-        .where({
-            username: req.body.username,
-            password: req.body.password,
-        })
-        .then(user => res.send(user[0]))
-        .catch(err => console.log(err));
-});
+app.use('/login', login);
 
 server.listen(3001, () => console.log(`You are listening on localhost:3001!`));

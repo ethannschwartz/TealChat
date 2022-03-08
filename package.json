@@ -1,20 +1,26 @@
 {
-  "name": "teal-chat-2.0",
+  "name": "teal-chat-3.0",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.26.1",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.15",
+    "luxon": "^2.3.1",
     "pg": "^8.7.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.27.1",
     "react-icons": "^4.3.1",
+    "react-query": "^3.34.16",
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
@@ -48,7 +54,6 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
-    "nodemon": "^2.0.15",
     "postcss": "^8.4.6",
     "tailwindcss": "^3.0.18"
   }
